@@ -1,0 +1,34 @@
+# .NET Core
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.dbmdl
+*.log
+*.swp
+*.suo
+*.user
+*.userosscache
+*.suo
+*.ncb
+*.sdf
+*.suo
+*.vscode
+*.config
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains Rider
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# NuGet
+.nuget/
