@@ -1,0 +1,30 @@
+# .NET
+bin/
+obj/
+project.lock.json
+project.fragment.lock.json
+*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.suo
+*.idb
+*.pdb
+*.exe
+*.dll
+*.log
+*.vs/
+*.vscode/
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Rider
+.idea/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
