@@ -21,6 +21,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-
+RUN echo "Martin Luna Rogel" > /tmp/315410.txt
 
 ENTRYPOINT ["dotnet", "FileDownload.dll"]
