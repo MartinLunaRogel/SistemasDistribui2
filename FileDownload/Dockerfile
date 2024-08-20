@@ -20,7 +20,5 @@ RUN dotnet publish "FileDownload.csproj" -c $configuration -o /app/publish /p:Us
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-RUN echo "Martin Luna Rogel" > /tmp/315410.txt
-
+RUN echo "Martin Luna Rogel" > /tmp/315410.txt 
 ENTRYPOINT ["dotnet", "FileDownload.dll"]
