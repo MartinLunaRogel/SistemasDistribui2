@@ -1,4 +1,3 @@
-using System.Data;
 using System.Runtime.Serialization;
 
 namespace SoapApi.Dtos;
