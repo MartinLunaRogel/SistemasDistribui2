@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using RespApi.Models;
 using RestApi.Infrasctructure.Mongo;
@@ -25,5 +26,13 @@ public class GroupRepository : IGroupRepository{
 
             return null;
         }
+    }
+    
+    public async Task<IList<GroupModel>> GetGroupsByNameAsync(string name, CancellationToken cancellationToken){
+        var filter = Builders<GroupEntity>.Filter.Regex(Group => Group.Name, new BsonRegularExpression(name, "i"));
+
+        var groups = await _groups.Find(filter).ToListAsync(cancellationToken);
+
+        return groups.Select(group => group.ToModel()).ToList();
     }
 }
