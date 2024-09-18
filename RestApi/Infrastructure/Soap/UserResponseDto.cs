@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace SoapApi.Dtos;
+namespace RestApi.Infrasctructure.Soap.SoapContracts;
 
 [DataContract]
 
