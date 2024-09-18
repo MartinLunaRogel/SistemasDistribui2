@@ -1,5 +1,6 @@
 using System.ServiceModel;
 using Microsoft.AspNetCore.WebUtilities;
+
 using SoapApi.Contracts;
 using SoapApi.Dtos;
 using SoapApi.Mappers;
@@ -14,6 +15,7 @@ public class UserService : IUserContract
 
     public UserService(IUserRepository userRepository)
     {
+
         _userRepository = userRepository;
     }
 
@@ -44,6 +46,7 @@ public class UserService : IUserContract
     public async Task<UserResponseDto> GetUserById(Guid userId, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+
 
         if(user is not null){
             return user.ToDto();
@@ -90,6 +93,7 @@ public class UserService : IUserContract
 
         return updatedUser.ToDto();
     }
+
 
 
 

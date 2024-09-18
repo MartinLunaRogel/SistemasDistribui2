@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using SoapCore;
 using SoapApi.Infrastructure;
@@ -22,3 +23,4 @@ app.UseSoapEndpoint<IUserContract>("/UserService.svc", new SoapEncoderOptions())
 app.UseSoapEndpoint<IBookContract>("/BookService.svc", new SoapEncoderOptions());
 
 app.Run();
+

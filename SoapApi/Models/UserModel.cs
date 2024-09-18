@@ -7,4 +7,5 @@ public class UserModel
     public String FirstName {get; set; } = null!;
     public String LastName {get; set; } = null!;
     public DateTime BirthDate {get; set; }
+
 }
