@@ -28,11 +28,18 @@ public class GroupRepository : IGroupRepository{
         }
     }
     
-    public async Task<IList<GroupModel>> GetGroupsByNameAsync(string name, CancellationToken cancellationToken){
-        var filter = Builders<GroupEntity>.Filter.Regex(Group => Group.Name, new BsonRegularExpression(name, "i"));
+    public async Task<IList<GroupModel>> GetGroupsByNameAsync(string name, int pageNumber, int pageSize, string orderBy, CancellationToken cancellationToken){
+        var filter = Builders<GroupEntity>.Filter.Regex(group => group.Name, new BsonRegularExpression(name, "i"));
 
-        var groups = await _groups.Find(filter).ToListAsync(cancellationToken);
+        var sort = Builders<GroupEntity>.Sort.Ascending(group => group.Name);
+
+        if (orderBy == "creationDate"){
+            sort = Builders<GroupEntity>.Sort.Ascending(group => group.CreatedAt);
+        }
+
+        var groups = await _groups.Find(filter).Skip(pageSize * (pageNumber - 1)).Limit(pageSize).Sort(sort).ToListAsync(cancellationToken);
 
         return groups.Select(group => group.ToModel()).ToList();
     }
+    
 }

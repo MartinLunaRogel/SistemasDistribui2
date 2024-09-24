@@ -1,4 +1,5 @@
 using System.ServiceModel;
+using RestApi.Infrastructure.Soap;
 
 
 namespace RestApi.Infrasctructure.Soap.SoapContracts;
