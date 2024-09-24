@@ -18,7 +18,6 @@ public class GroupService : IGroupService {
         _userRepositiry = userRepository;
     }
     
-
     public async Task<GroupUserModel> GetGroupByIdAsync (string id, CancellationToken cancellationToken){
 
         var group = await _groupRepository.GetByIdAsync(id, cancellationToken);

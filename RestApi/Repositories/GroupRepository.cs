@@ -27,7 +27,6 @@ public class GroupRepository : IGroupRepository{
             return null;
         }
     }
-    
     public async Task<IList<GroupModel>> GetGroupsByNameAsync(string name, int pageNumber, int pageSize, string orderBy, CancellationToken cancellationToken){
         var filter = Builders<GroupEntity>.Filter.Regex(group => group.Name, new BsonRegularExpression(name, "i"));
 
