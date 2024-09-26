@@ -1,9 +1,9 @@
-using RespApi.Dtos;
-using RespApi.Models;
+using RestApi.Dtos;
+using RestApi.Models;
 using RestApi.Infrasctructure.Soap.SoapContracts;
 using RestApi.Infrastructure.Soap;
 
-namespace RespApi.Mappers;
+namespace RestApi.Mappers;
 
 public static class UserMapper{
     public static UserModel ToDomain(this UserResponseDto user){

@@ -1,4 +1,4 @@
-using RespApi.Models;
+using RestApi.Models;
 namespace RestApi.Models;
 
 public class GroupUserModel{

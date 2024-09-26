@@ -1,6 +1,6 @@
 using Amazon.SecurityToken.Model;
 
-namespace RespApi.Models;
+namespace RestApi.Models;
 
 public class UserModel{
     public Guid Id {get; set;}
