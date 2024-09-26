@@ -7,4 +7,5 @@ public interface IGroupRepository{
     Task <IList<GroupModel>> GetGroupsByNameAsync(string name,int pageNumber, int pageSize, string orderBy, CancellationToken cancellationToken);
     Task DeleteByIdAsync(string id, CancellationToken cancellationToken);
     Task <GroupModel> CreateAsync(string name, Guid [] Users, CancellationToken cancellationToken);
+    Task <IList<GroupModel>> GetByExNameAsync(string name, int pageNumber, int pageSize, string orderBy, CancellationToken cancellationToken);
 }

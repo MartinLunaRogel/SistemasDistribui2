@@ -87,4 +87,25 @@ public class GroupService : IGroupService {
                     .ToList()
         };
     }
+
+    public async Task<IList<GroupUserModel>> GetGroupByExNameAsync(string name, int page, int pageS, string orderBy, CancellationToken cancellationToken)
+    {
+        var groups = await _groupRepository.GetByExNameAsync(name, page, pageS, orderBy,  cancellationToken);
+
+        if (groups == null || !groups.Any())
+        {
+            return new List<GroupUserModel>(); 
+        }
+
+        return await Task.WhenAll(groups.Select(async group => new GroupUserModel
+        {
+            Id = group.Id,
+            Name = group.Name,
+            CreationDate = group.CreationDate,
+            Users = (await Task.WhenAll(
+                group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken))))
+                .Where(user => user != null)
+                .ToList()
+        }));
+    }
 }

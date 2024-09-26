@@ -59,4 +59,20 @@ public class GroupRepository : IGroupRepository{
        var filter = Builders<GroupEntity>.Filter.Eq(s => s.Id, id);
        await _groups.DeleteOneAsync(filter, cancellationToken);
     }
+
+    public async Task<IList<GroupModel>> GetByExNameAsync(string name, int page, int pageS, string orderBy, CancellationToken cancellationToken)
+    {
+        var filter = Builders<GroupEntity>.Filter.Eq(group => group.Name, name);
+
+        var sort = Builders<GroupEntity>.Sort.Ascending(n => n.Name);
+
+        if (orderBy != "name") {
+            sort = Builders<GroupEntity>.Sort.Descending(n => n.CreatedAt);
+        }
+
+        var groupsOr = _groups.Find(filter).Sort(sort).Skip((page - 1) * pageS).Limit(pageS);
+
+        var groups = await groupsOr.ToListAsync(cancellationToken);
+        return groups.Select(group => group.ToModel()).ToList();
+    }
 }

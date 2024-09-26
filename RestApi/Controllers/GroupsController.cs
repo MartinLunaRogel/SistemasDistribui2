@@ -76,4 +76,12 @@ public class GroupsController : ControllerBase {
         };
     }
     
+    [HttpGet("name")]
+    public async Task<ActionResult<IList<GroupResponse>>> GetByExactNameAsync([FromQuery] string name, 
+    [FromQuery] int page, [FromQuery] int pageS, [FromQuery] string orderBy, CancellationToken cancellationToken){
+
+        var groups = await _groupService.GetGroupsByNameAsync(name, page, pageS, orderBy, cancellationToken);
+
+        return Ok(groups.Select(group => group.ToDto()).ToList());
+    }
 }
