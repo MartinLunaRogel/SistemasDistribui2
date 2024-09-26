@@ -27,9 +27,10 @@ public class GroupsController : ControllerBase {
     }
 
     [HttpGet]
-    public async Task<ActionResult<IList<GroupResponse>>> GetGroupsByName([FromQuery] string name, CancellationToken cancellationToken){
-        var groups = await _groupService.GetGroupsByNameAsync(name, cancellationToken);
+    public async Task<ActionResult<IList<GroupResponse>>> GetGroupsByName([FromQuery] string name, [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string orderBy, CancellationToken cancellationToken){
+        var groups = await _groupService.GetGroupsByNameAsync(name, pageNumber,pageSize,orderBy ,cancellationToken);
         
         return Ok(groups.Select(group => group.ToDto()).ToList());
-    }
+    } 
+    
 }
