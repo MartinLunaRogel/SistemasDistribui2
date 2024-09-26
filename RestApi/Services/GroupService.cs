@@ -1,23 +1,23 @@
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
-using RespApi.Repositories;
-using RestApi.Models;
 using RestApi.Repositories;
+using RestApi.Models;
+using RestApi.Exceptions;
 
 namespace RestApi.Services;
 
 public class GroupService : IGroupService {
 
     private readonly IGroupRepository _groupRepository;
-    private readonly IUserRepository  _userRepositiry;
+    private readonly IUserRepository  _userRepository;
     private readonly IUserRepository userRepository;
 
     public GroupService(IGroupRepository groupRepository, IUserRepository userRepository)
     {
         _groupRepository = groupRepository;
-        _userRepositiry = userRepository;
+        _userRepository = userRepository;
     }
-    
+
     public async Task<GroupUserModel> GetGroupByIdAsync (string id, CancellationToken cancellationToken){
 
         var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
@@ -30,7 +30,7 @@ public class GroupService : IGroupService {
             Name = group.Name,
             CreationDate = group.CreationDate,
             Users = (await Task.WhenAll(
-                group.Users.Select(userId => _userRepositiry.GetByIdAsync(
+                group.Users.Select(userId => _userRepository.GetByIdAsync(
                     userId, cancellationToken)))).Where(UserClaimsPrincipalFactory => UserClaimsPrincipalFactory != null)
                     .ToList()
             };
@@ -47,9 +47,44 @@ public class GroupService : IGroupService {
             Id = group.Id,
             Name = group.Name,
             CreationDate = group.CreationDate,
-            Users = (await Task.WhenAll(group.Users.Select(async user => await _userRepositiry.GetByIdAsync(user, cancellationToken)))).ToList()
+            Users = (await Task.WhenAll(group.Users.Select(async user => await _userRepository.GetByIdAsync(user, cancellationToken)))).ToList()
         }));
 
         return groupUserModels.ToList();
+    }
+
+
+    public async Task DeleteGroupByIdAsync(string id, CancellationToken cancellationToken)
+    {
+        var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
+        if(group is null){
+            throw new GroupNotFoundException();
+        }
+
+        await _groupRepository.DeleteByIdAsync(id, cancellationToken);
+    }
+
+    public async Task<GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken )
+    {
+       if(users.Length==0){
+        throw new InvalidGroupRequestFormatException();
+       }
+
+       var groups = await _groupRepository.GetGroupsByNameAsync(name, 1, 1, "Name", cancellationToken);
+       if(groups.Any()){
+        throw new GroupAlreadyExistsException();
+       }
+
+       var group= await _groupRepository.CreateAsync(name, users, cancellationToken);
+
+       return new GroupUserModel {
+            Id = group.Id,
+            Name = group.Name,
+            CreationDate = group.CreationDate,
+            Users = (await Task.WhenAll(
+                group.Users.Select(userId => _userRepository.GetByIdAsync(
+                    userId, cancellationToken)))).Where(user => user != null)
+                    .ToList()
+        };
     }
 }

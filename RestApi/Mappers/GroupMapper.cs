@@ -1,10 +1,7 @@
 using MongoDB.Driver.Core.Operations;
-using RespApi.Dtos;
-using RespApi.Models;
-using RespApi.Repositories;
 using RestApi.Dtos;
-using RestApi.Infrasctructure.Mongo;
 using RestApi.Models;
+using RestApi.Infrasctructure.Mongo;
 
 namespace RestApi.Mappers;
 

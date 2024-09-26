@@ -1,4 +1,4 @@
-namespace RespApi.Models;
+namespace RestApi.Models;
 
 public class GroupModel{
     public string Id { get; set; }
