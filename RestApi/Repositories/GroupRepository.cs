@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using RespApi.Models;
+using RestApi.Models;
 using RestApi.Infrasctructure.Mongo;
 using RestApi.Mappers;
 
@@ -40,5 +40,23 @@ public class GroupRepository : IGroupRepository{
 
         return groups.Select(group => group.ToModel()).ToList();
     }
-    
+
+    public async Task<GroupModel> CreateAsync(string name, Guid[] Users, CancellationToken cancellationToken)
+    {
+       var group= new GroupEntity{
+        Name=name,
+        Users= Users,
+        CreatedAt= DateTime.UtcNow,
+        Id= ObjectId.GenerateNewId().ToString()
+       };
+
+       await _groups.InsertOneAsync(group, new InsertOneOptions(), cancellationToken);
+       return group.ToModel();
+    }
+
+    public async Task DeleteByIdAsync(string id, CancellationToken cancellationToken)
+    {
+       var filter = Builders<GroupEntity>.Filter.Eq(s => s.Id, id);
+       await _groups.DeleteOneAsync(filter, cancellationToken);
+    }
 }

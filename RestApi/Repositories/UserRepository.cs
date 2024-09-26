@@ -1,10 +1,10 @@
 using System.ServiceModel;
-using RespApi.Models;
-using RespApi.Mappers;
+using RestApi.Models;
+using RestApi.Mappers;
 using RestApi.Infrasctructure.Soap.SoapContracts;
-using RespApi.Repositories;
+using RestApi.Repositories;
 
-namespace RespApi.Repositories;
+namespace RestApi.Repositories;
 
 public class UserRepository:IUserRepository{
     private readonly ILogger<UserRepository> _logger;
