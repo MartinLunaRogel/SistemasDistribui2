@@ -76,6 +76,15 @@ public class GroupService : IGroupService {
         throw new GroupAlreadyExistsException();
        }
 
+       foreach (var userId in users)
+       {
+            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+            if (user is null)
+            {
+                throw new UserNotFoundException(userId); 
+            }
+       }
+
        var newGroup = await _groupRepository.CreateAsync(name, users, cancellationToken);
 
        return new GroupUserModel {
@@ -84,5 +93,36 @@ public class GroupService : IGroupService {
             CreationDate = newGroup.CreatedAt,
             Users = (await Task.WhenAll(newGroup.Users.Select(async user => await _userRepository.GetByIdAsync(user, cancellationToken)))).ToList()
         };
+    }
+
+    public async Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken)
+    {
+        if(users.Length == 0)
+        {
+            throw new InvalidGroupRequestFormatException();
+        }
+
+       var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
+       if (group is null)
+       {
+            throw new GroupNotFoundException();
+       }
+
+       var groups = await _groupRepository.GetByNameAsync(name, cancellationToken);
+       if(groups is not null && groups.Id != id)
+       {
+            throw new GroupAlreadyExistsException();
+       }
+
+        foreach (var userId in users)
+        {
+            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
+            if (user is null)
+            {
+                throw new UserNotFoundException(userId);
+            }
+        }
+
+       await _groupRepository.UpdateGroupAsync(id, name, users, cancellationToken);
     }
 }
