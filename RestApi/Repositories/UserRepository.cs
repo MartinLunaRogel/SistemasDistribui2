@@ -23,7 +23,7 @@ public class UserRepository:IUserRepository{
          var user = await _userContract.GetUserById(userId, cancellationToken);
          return user.ToDomain();   
         }
-        catch (FaultException ex) when (ex.Message == "UserNotFound")
+        catch (FaultException ex) when (ex.Message == "User Not Found")
         {
             _logger.LogWarning("User Not Found {UserId}, userId");
             return null;

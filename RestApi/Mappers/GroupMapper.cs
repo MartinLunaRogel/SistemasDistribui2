@@ -31,7 +31,7 @@ public static class GroupMapper{
             Id = group.Id,
             Name = group.Name,
             Users = group.Users,
-            CreationDate = group.CreatedAt
+            CreatedAt = group.CreatedAt
         };
     }
 }
