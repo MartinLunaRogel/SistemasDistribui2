@@ -75,7 +75,7 @@ public class GroupService : IGroupService {
        {
         throw new GroupAlreadyExistsException();
        }
-
+      
        var newGroup = await _groupRepository.CreateAsync(name, users, cancellationToken);
 
        return new GroupUserModel {
