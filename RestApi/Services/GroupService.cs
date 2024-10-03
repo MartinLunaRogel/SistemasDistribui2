@@ -68,7 +68,6 @@ public class GroupService : IGroupService {
        {
         throw new InvalidGroupRequestFormatException();
        }
-
        var group = await _groupRepository.GetByNameAsync(name, cancellationToken);
        
        if(group is not null)
@@ -84,7 +83,6 @@ public class GroupService : IGroupService {
                 throw new UserNotFoundException(userId); 
             }
        }
-
        var newGroup = await _groupRepository.CreateAsync(name, users, cancellationToken);
 
        return new GroupUserModel {
