@@ -6,7 +6,7 @@ namespace RestApi.Infrastructure.Soap;
 public class UserResponseDto
 {
     [DataMember(Order = 5)]
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
     
     [DataMember(Order = 2)]
     public string Email { get; set; } = null!;

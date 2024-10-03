@@ -12,10 +12,10 @@ public static class UserMapper{
            return null; 
         }
         return new UserModel{
-            Id = user.UserId,
+            Id = user.Id,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            BirthDay = user.BirthDate,
+            BirthDate = user.BirthDate,
             Email = user.Email
         };
     }
@@ -28,7 +28,7 @@ public static class UserMapper{
             Id = user.Id,
             Email = user.Email,
             Name = user.FirstName + " " + user.LastName,
-            BirthDate = user.BirthDay
+            BirthDate = user.BirthDate
         };
     }
 
