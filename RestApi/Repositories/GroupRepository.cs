@@ -28,6 +28,20 @@ public class GroupRepository : IGroupRepository{
             return null;
         }
     }
+    
+    public async Task<GroupModel> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var filter = Builders<GroupEntity>.Filter.Regex(group => group.Name, new BsonRegularExpression(name, "i"));
+            var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
+            return group.ToModel();
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+    }
 
     public async Task<IList<GroupModel>> GetAllByNameAsync(string name, int pageNumber, int pageSize, string orderBy, CancellationToken cancellationToken)
     {
