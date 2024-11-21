@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
+using RestApi.Repositories;
 using RestApi.Services;
 using RestApi.Mappers;
 using RestApi.Exceptions;
@@ -14,9 +15,11 @@ namespace RestApi.Controller;
 [Authorize]
 public class GroupsController : ControllerBase {
     private readonly IGroupService _groupService;
-    public GroupsController(IGroupService groupService)
+    private readonly IUserRepository _userRepository;
+    public GroupsController(IGroupService groupService, IUserRepository userRepository)
     {
         _groupService = groupService;
+        _userRepository = userRepository;
     }
 
     //localhosts:port/groups/192282892929
@@ -70,6 +73,45 @@ public class GroupsController : ControllerBase {
         catch(GroupAlreadyExistsException){
             return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
                 {"Groups", ["Group with some name already exist"]}
+            }));
+        }
+        catch (UserNotFoundException)
+        {
+            return BadRequest(NewValidationProblemDetails("One or more validation errors occurred.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>
+            {
+                {"Users", new[] { "A user ID provided is invalid." }}
+            }));
+        }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateGroup(string id, [FromBody] UpdateGroupRequest groupRequest, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _groupService.UpdateGroupAsync(id, groupRequest.Name, groupRequest.Users, cancellationToken);
+            return NoContent();
+        }
+        catch(GroupNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (InvalidGroupRequestFormatException)
+        {
+            return BadRequest(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Users array is empty"]}
+            }));
+        }
+        catch(GroupAlreadyExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Group with some name already exist"]}
+            }));
+        }
+        catch (UserNotFoundException)
+        {
+            return BadRequest(NewValidationProblemDetails("One or more validation errors occurred.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>
+            {
+                {"Users", new[] { "A user ID provided is invalid." }}
             }));
         }
     }
