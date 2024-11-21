@@ -1,6 +1,9 @@
 using MongoDB.Driver;
 using RestApi.Repositories;
 using RestApi.Services;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,23 @@ builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(Options => {
+        Options.Authority = builder.Configuration.GetValue<string>("Authentication:Authority");
+        Options.RequireHttpsMetadata = false;
+        Options.TokenValidationParameters = new TokenValidationParameters{
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration.GetValue<string>("Authentication:Issuer"),
+            ValidateActor = false,
+            ValidateLifetime = true,
+            ValidateAudience = true,
+            ValidAudience = "groups-api",
+            ValidateIssuerSigningKey = true
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,6 +44,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();

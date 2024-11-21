@@ -1,14 +1,17 @@
-using System.Net;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
-using RestApi.Exceptions;
-using RestApi.Mappers;
 using RestApi.Services;
+using RestApi.Mappers;
+using RestApi.Exceptions;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestApi.Controller;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class GroupsController : ControllerBase {
     private readonly IGroupService _groupService;
     public GroupsController(IGroupService groupService)
