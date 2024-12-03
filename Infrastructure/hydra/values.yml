@@ -37,4 +37,4 @@ hydra:
       access_token: "jwt"
   dev: true
   automigration:
-    enabled: true
+    enabled: truee
