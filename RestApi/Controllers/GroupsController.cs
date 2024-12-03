@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
-using RestApi.Repositories;
 using RestApi.Services;
 using RestApi.Mappers;
 using RestApi.Exceptions;
@@ -24,6 +23,7 @@ public class GroupsController : ControllerBase {
 
     //localhosts:port/groups/192282892929
     [HttpGet("{id}")]
+    [Authorize(Policy = "Read")]
     public async Task <ActionResult<GroupResponse>> GetGroupById(string id, CancellationToken cancellationToken)
     {
         var group = await _groupService.GetGroupByIdAsync(id, cancellationToken);
@@ -37,6 +37,7 @@ public class GroupsController : ControllerBase {
     }
 
     [HttpGet]
+    [Authorize(Policy = "Read")]
     public async Task<ActionResult<IList<GroupResponse>>> GetAllByName([FromQuery] string name, [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] string orderBy, CancellationToken cancellationToken)
     {
         var groups = await _groupService.GetAllByNameAsync(name, pageNumber,pageSize,orderBy ,cancellationToken);
@@ -45,6 +46,7 @@ public class GroupsController : ControllerBase {
     } 
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "Write")]
     public async Task<IActionResult> DeleteGroup(string id, CancellationToken cancellationToken){
         try
         {
@@ -58,6 +60,7 @@ public class GroupsController : ControllerBase {
     }
 
     [HttpPost]
+    [Authorize(Policy = "Write")]
     public async Task<ActionResult<GroupResponse>> CreateGroup([FromBody] CreateGroupRequest groupRequest, CancellationToken cancellationToken){
         try
         {
